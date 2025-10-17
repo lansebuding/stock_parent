@@ -1,0 +1,43 @@
+# web定义
+server:
+  port: 8091
+
+
+# 数据源定义
+spring:
+  datasource:
+    druid:
+      username: root
+      password:
+      url: jdbc:mysql://localhost/stock_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+      driver-class-name: com.mysql.jdbc.Driver
+      # 初始化时建立物理连接的个数。初始化发生在显示调用 init 方法，或者第一次 getConnection 时
+      initialSize: 6
+      # 最小连接池数量
+      minIdle: 2
+      # 最大连接池数量
+      maxActive: 20
+      # 获取连接时最大等待时间，单位毫秒。配置了 maxWait 之后，缺省启用公平锁，
+      # 并发效率会有所下降，如果需要可以通过配置 useUnfairLock 属性为 true 使用非公平锁。
+      maxWait: 60000
+  profiles:
+    active: cache # 配置激活哪个 application   yml文件
+
+# mybatis 定义
+mybatis:
+  # 给实体类添加别名
+  type-aliases-package: com.itheima.stock.pojo.entity
+  # 指定mapperxml位置
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    # 开启驼峰自动映射
+    map-underscore-to-camel-case: true
+    # 通过mybatis执行的sql的日志输出到终端
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 配置分页插件
+pagehelper:
+  # 配置分页的方法（数据库类型）
+  helper-dialect: mysql
+  # 开启合理查询 比如输入页数过大时，自动查询最后一页
+  reasonable: true
