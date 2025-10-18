@@ -35,6 +35,12 @@
            <artifactId>spring-security-crypto</artifactId>
        </dependency>
 
+       <!--hutool万能工具包-->
+       <dependency>
+           <groupId>cn.hutool</groupId>
+           <artifactId>hutool-all</artifactId>
+       </dependency>
+
        <!--redis场景依赖-->
        <dependency>
            <groupId>org.springframework.boot</groupId>

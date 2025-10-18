@@ -18,6 +18,10 @@ public class LoginReqVo {
      */
     private String password;
     /**
+     * 密码
+     */
+    private String sessionId;
+    /**
      * 验证码
      */
     private String code;
