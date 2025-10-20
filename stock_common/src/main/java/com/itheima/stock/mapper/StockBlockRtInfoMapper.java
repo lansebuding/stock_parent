@@ -1,6 +1,10 @@
 package com.itheima.stock.mapper;
 
+import com.itheima.stock.pojo.domain.PlateMarketDomain;
 import com.itheima.stock.pojo.entity.StockBlockRtInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author Admin
@@ -22,4 +26,5 @@ public interface StockBlockRtInfoMapper {
 
     int updateByPrimaryKey(StockBlockRtInfo record);
 
+    List<PlateMarketDomain> getPlateMarket(Date date);
 }

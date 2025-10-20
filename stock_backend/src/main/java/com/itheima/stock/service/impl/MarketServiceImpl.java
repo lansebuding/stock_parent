@@ -1,7 +1,9 @@
 package com.itheima.stock.service.impl;
 
+import com.itheima.stock.mapper.StockBlockRtInfoMapper;
 import com.itheima.stock.mapper.StockMarketIndexInfoMapper;
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
+import com.itheima.stock.pojo.domain.PlateMarketDomain;
 import com.itheima.stock.pojo.vo.StockInfoConfig;
 import com.itheima.stock.service.MarketService;
 //import com.itheima.stock.utils.DateTimeUtil;
@@ -24,6 +26,9 @@ public class MarketServiceImpl implements MarketService {
     @Autowired
     private StockMarketIndexInfoMapper infoMapper;
 
+    @Autowired
+    private StockBlockRtInfoMapper rtInfoMapper;
+
     @Override
     public R<List<InnerMarketDomain>> getInnerMarket() {
         // 获取当前时间下的上一次收盘时间
@@ -37,5 +42,13 @@ public class MarketServiceImpl implements MarketService {
         List<String> innerList = stockInfoConfig.getInner();
         List<InnerMarketDomain> result = infoMapper.getInnerMarket(date, innerList);
         return R.ok(result);
+    }
+
+    @Override
+    public R<List<PlateMarketDomain>> getPlateMarket() {
+        DateTime dateTime = DateTime.parse("2021-12-21 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        Date date = dateTime.toDate();
+        List<PlateMarketDomain> list = rtInfoMapper.getPlateMarket(date);
+        return R.ok(list);
     }
 }

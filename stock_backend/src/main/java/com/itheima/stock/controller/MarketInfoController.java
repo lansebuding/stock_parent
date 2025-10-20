@@ -1,6 +1,7 @@
 package com.itheima.stock.controller;
 
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
+import com.itheima.stock.pojo.domain.PlateMarketDomain;
 import com.itheima.stock.service.MarketService;
 import com.itheima.stock.vo.resp.R;
 import io.swagger.annotations.Api;
@@ -25,5 +26,10 @@ public class MarketInfoController {
     @ApiOperation("获取国内大盘最新数据")
     public R<List<InnerMarketDomain>> getInnerMarket(){
         return marketService.getInnerMarket();
+    }
+
+    @GetMapping("/sector/all")
+    public R<List<PlateMarketDomain>> getPlateMarket(){
+        return marketService.getPlateMarket();
     }
 }
