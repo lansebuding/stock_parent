@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api("/api/quot")
 @RestController
@@ -58,5 +59,10 @@ public class MarketInfoController {
     @GetMapping("/stock/increase")
     public R<List<StockUpdownDomain>> getIncreaseMarket(){
         return marketService.getIncreaseMarket();
+    }
+
+    @GetMapping("/stock/updown/count")
+    public R<Map<String,List>> getUpDownData(){
+        return marketService.getUpDownData();
     }
 }

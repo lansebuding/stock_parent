@@ -7,6 +7,7 @@ import com.itheima.stock.vo.resp.PageResult;
 import com.itheima.stock.vo.resp.R;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MarketService {
     R<List<InnerMarketDomain>> getInnerMarket();
@@ -16,4 +17,6 @@ public interface MarketService {
     R<PageResult<StockUpdownDomain>> getAllMarkets(Integer page, Integer pageSize);
 
     R<List<StockUpdownDomain>> getIncreaseMarket();
+
+    R<Map<String, List>> getUpDownData();
 }

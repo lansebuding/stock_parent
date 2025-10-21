@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MarketServiceImpl implements MarketService {
@@ -78,5 +80,19 @@ public class MarketServiceImpl implements MarketService {
         Date date = dateTime.toDate();
         List<StockUpdownDomain> dataList = stockRtInfoMapper.getIncreaseMarket(date);
         return R.ok(dataList);
+    }
+
+    @Override
+    public R<Map<String, List>> getUpDownData() {
+        DateTime startDate = DateTime.parse("2022-01-06 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        Date startTime = startDate.toDate();
+        DateTime endDate = DateTime.parse("2022-01-06 14:25:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        Date endTime = endDate.toDate();
+        List<Map> upList = rtInfoMapper.getUpDownData(startTime, endTime, 1);
+        List<Map> downList = rtInfoMapper.getUpDownData(startTime, endTime, 2);
+        HashMap<String, List> hashMap = new HashMap<>();
+        hashMap.put("upList", upList);
+        hashMap.put("downList", downList);
+        return R.ok(hashMap);
     }
 }
