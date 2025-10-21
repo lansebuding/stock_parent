@@ -31,6 +31,48 @@
         from stock_rt_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="getMarketByPage" resultType="com.itheima.stock.pojo.domain.StockUpdownDomain">
+        SELECT
+            sri.trade_amount AS tradeAmt,
+            sri.pre_close_price AS preClosePrice,
+            (sri.max_price - sri.min_price) / sri.pre_close_price AS amplitude,
+            sri.stock_code AS CODE,
+            sri.stock_name AS NAME,
+            sri.cur_time AS CURDATE,
+            sri.trade_volume AS tradeVol,
+            (
+                sri.cur_price - sri.pre_close_price
+                ) AS upDown,
+            (
+                sri.cur_price - sri.pre_close_price
+                ) / sri.pre_close_price AS increase,
+            sri.cur_price AS tradePrice
+        FROM
+            stock_rt_info AS sri
+        WHERE sri.cur_time = #{date}
+        ORDER BY upDown DESC
+    </select>
+    <select id="getIncreaseMarket" resultType="com.itheima.stock.pojo.domain.StockUpdownDomain">
+        SELECT
+            sri.trade_amount AS tradeAmt,
+            sri.pre_close_price AS preClosePrice,
+            (sri.max_price - sri.min_price) / sri.pre_close_price AS amplitude,
+            sri.stock_code AS CODE,
+            sri.stock_name AS NAME,
+            sri.cur_time AS CURDATE,
+            sri.trade_volume AS tradeVol,
+            (
+                sri.cur_price - sri.pre_close_price
+                ) AS upDown,
+            (
+                sri.cur_price - sri.pre_close_price
+                ) / sri.pre_close_price AS increase,
+            sri.cur_price AS tradePrice
+        FROM
+            stock_rt_info AS sri
+        WHERE sri.cur_time = #{date}
+        ORDER BY upDown DESC LIMIT 4
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

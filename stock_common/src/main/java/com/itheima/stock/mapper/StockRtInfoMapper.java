@@ -1,6 +1,10 @@
 package com.itheima.stock.mapper;
 
+import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.pojo.entity.StockRtInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author Admin
@@ -22,4 +26,7 @@ public interface StockRtInfoMapper {
 
     int updateByPrimaryKey(StockRtInfo record);
 
+    List<StockUpdownDomain> getMarketByPage(Date date);
+
+    List<StockUpdownDomain> getIncreaseMarket(Date date);
 }

@@ -2,34 +2,61 @@ package com.itheima.stock.controller;
 
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
 import com.itheima.stock.pojo.domain.PlateMarketDomain;
+import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.service.MarketService;
+import com.itheima.stock.vo.resp.PageResult;
 import com.itheima.stock.vo.resp.R;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api("/api/quot")
 @RestController
 @RequestMapping("/api/quot")
-@Api(tags = "股票数据控制器")
 public class MarketInfoController {
 
     @Autowired
     private MarketService marketService;
 
+    @ApiOperation(value = "获取国内大盘最新数据", notes = "", httpMethod = "GET")
     @GetMapping("/index/all")
-    @ApiOperation("获取国内大盘最新数据")
-    public R<List<InnerMarketDomain>> getInnerMarket(){
+    public R<List<InnerMarketDomain>> getInnerMarket() {
         return marketService.getInnerMarket();
     }
 
+    @ApiOperation(value = "", notes = "", httpMethod = "GET")
     @GetMapping("/sector/all")
-    public R<List<PlateMarketDomain>> getPlateMarket(){
+    public R<List<PlateMarketDomain>> getPlateMarket() {
         return marketService.getPlateMarket();
+    }
+
+    /**
+     * 分页获取个股详情
+     * @param page 当前页数
+     * @param pageSize 每页条数
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "page", value = "当前页数"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "pageSize", value = "每页条数")
+    })
+    @ApiOperation(value = "分页获取个股详情", notes = "分页获取个股详情", httpMethod = "GET")
+    @GetMapping("/stock/all")
+    public R<PageResult<StockUpdownDomain>> getAllMarkets(@RequestParam(required = false, defaultValue = "1") Integer page,
+                                                          @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        return marketService.getAllMarkets(page, pageSize);
+    }
+
+    /**
+     * 获取个股排行前4条
+     */
+    @ApiOperation(value = "获取个股排行前4条", notes = "获取个股排行前4条", httpMethod = "GET")
+    @GetMapping("/stock/increase")
+    public R<List<StockUpdownDomain>> getIncreaseMarket(){
+        return marketService.getIncreaseMarket();
     }
 }
