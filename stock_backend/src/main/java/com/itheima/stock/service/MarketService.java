@@ -1,11 +1,13 @@
 package com.itheima.stock.service;
 
+import cn.hutool.http.server.HttpServerResponse;
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
 import com.itheima.stock.pojo.domain.PlateMarketDomain;
 import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.vo.resp.PageResult;
 import com.itheima.stock.vo.resp.R;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -19,4 +21,6 @@ public interface MarketService {
     R<List<StockUpdownDomain>> getIncreaseMarket();
 
     R<Map<String, List>> getUpDownData();
+
+    void downloadMarketExcel(Integer page, Integer pageSize, HttpServletResponse res);
 }

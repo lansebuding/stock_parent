@@ -1,5 +1,8 @@
 package com.itheima.stock.service.impl;
 
+import cn.hutool.http.server.HttpServerResponse;
+import com.alibaba.excel.EasyExcel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.itheima.stock.mapper.StockBlockRtInfoMapper;
@@ -13,18 +16,25 @@ import com.itheima.stock.service.MarketService;
 //import com.itheima.stock.utils.DateTimeUtil;
 import com.itheima.stock.vo.resp.PageResult;
 import com.itheima.stock.vo.resp.R;
+import com.itheima.stock.vo.resp.ResponseCode;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 //import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class MarketServiceImpl implements MarketService {
 
     @Autowired
@@ -94,5 +104,40 @@ public class MarketServiceImpl implements MarketService {
         hashMap.put("upList", upList);
         hashMap.put("downList", downList);
         return R.ok(hashMap);
+    }
+
+    /**
+     * excel导出功能
+     *
+     * @param page     当前页数
+     * @param pageSize 每页条数
+     * @param res      响应对象
+     */
+    @Override
+    public void downloadMarketExcel(Integer page, Integer pageSize, HttpServletResponse res) {
+        PageResult<StockUpdownDomain> pageResult = this.getAllMarkets(page, pageSize).getData();
+        List<StockUpdownDomain> domains = pageResult.getRows();
+
+        String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String fileName = "导出" + format + ".xlsx";
+
+        res.setContentType("application/vnd.ms-excel");
+        res.setCharacterEncoding("utf-8");
+        try {
+            res.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes(StandardCharsets.UTF_8), "ISO8859-1"));
+            EasyExcel.write(res.getOutputStream(), StockUpdownDomain.class).sheet("kk").doWrite(domains);
+        } catch (IOException e) {
+            log.error("导出涨幅榜数据出错。原因：{}", e.getMessage());
+            // 重置response
+            res.reset();
+            res.setContentType("application/json");
+            res.setCharacterEncoding("utf-8");
+            R<Object> objectR = R.error(ResponseCode.ERROR);
+            try {
+                res.getWriter().println(new ObjectMapper().writeValueAsString(objectR));
+            } catch (IOException ioException) {
+                log.error("导出涨幅榜数据，返回JSON出错。原因：{}", ioException.getMessage());
+            }
+        }
     }
 }
